@@ -1,0 +1,32 @@
+﻿.jumbotron {
+    background-color: #fff;
+    margin-bottom: 0;
+}
+
+@media (min-width: 576px) {
+    .jumbotron {
+        padding: 1rem 1rem;
+    }
+}
+
+.table td{
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.table tr:first-child td {
+    border-top: 0;
+}
+
+.table tr:last-child td {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.promjena-zaporke {
+    font-size: 2.8rem;
+}
+
+#formPromjeniZaporku{
+    width: 450px;
+    margin: 2rem auto;
+}

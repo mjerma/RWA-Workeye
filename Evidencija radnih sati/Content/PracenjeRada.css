@@ -1,0 +1,80 @@
+﻿.jumbotron {
+    background-color: #fff;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+@media (min-width: 576px) {
+    .jumbotron {
+        padding: 1rem 1rem;
+        padding-bottom: 0;
+    }
+}
+
+.table th, .table td {
+    vertical-align: middle !important;
+}
+
+tr {
+    text-align: center;
+}
+
+tr:last-child {
+    font-weight: bold;
+}
+
+.btn-sm {
+    margin-top: 0;
+}
+
+.btn-action {
+    margin-top: 10px;
+}
+
+.radniSati, .prekovremeniSati {
+    text-align: center;
+}
+
+.zabiljezeno, #zabiljezenoUkupno, #radniSatiUkupno, #prekovremeniSatiUkupno {
+    text-align: center;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+#zabiljezenoUkupno, #radniSatiUkupno, #prekovremeniSatiUkupno {
+    font-weight: bold;
+}
+
+.div-date {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+#datepicker {
+    margin-left: 1rem;
+    height: 30px;
+    width: 110px;
+    text-align: center;
+}
+
+.ui-datepicker-trigger {
+    border: none;
+    background: none;
+    height: 26px;
+    
+}
+
+.ui-datepicker-trigger img {
+    width: auto;
+    height: 100%;
+}
+
+/*#pracenje-rada-container{
+    width: 1000px;
+}*/
+
+.radniSati-td {
+    max-width: 50px;
+    white-space: nowrap;
+}

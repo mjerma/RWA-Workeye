@@ -1,0 +1,34 @@
+using System;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace Evidencija_radnih_sati
+{
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        protected void Application_Start()
+        {
+            AreaRegistration.RegisterAllAreas();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+        }
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            HttpCookie kuki = HttpContext.Current.Request.Cookies["culture"];
+            if (kuki != null && kuki.Value != null)
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture
+                = new System.Globalization.CultureInfo(kuki.Value);
+                System.Threading.Thread.CurrentThread.CurrentUICulture
+                = new System.Globalization.CultureInfo(kuki.Value);
+            }
+            else
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture
+                 = new System.Globalization.CultureInfo("hr");
+                System.Threading.Thread.CurrentThread.CurrentUICulture
+               = new System.Globalization.CultureInfo("hr");
+            }
+        }
+    }
+}

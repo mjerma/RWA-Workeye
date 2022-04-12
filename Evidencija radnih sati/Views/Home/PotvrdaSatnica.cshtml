@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Evidencija_radnih_sati.Models.ViewModel.PotvrdaSatniceVM>
+@using Evidencija_radnih_sati.Resources
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <title>Potvrda satnica</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/PotvrdaSatnica.css" rel="stylesheet" />
+</head>
+<body>
+    @{Html.RenderAction("Navigacija", "Home");}
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4 text-center">@PotvrdaSatnica.PotvrdaSatnicaNaslov</h1>
+        </div>
+        <div class="mt-1 table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>@PotvrdaSatnica.Ime</th>
+                        <th>@PotvrdaSatnica.Prezime</th>
+                        <th>@PotvrdaSatnica.DatumSatnice</th>
+                        <th>@PotvrdaSatnica.DatumSlanja</th>
+                        <th>@PotvrdaSatnica.VrijemeSlanja</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.djelatnik.Ime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.djelatnik.Prezime)
+                            </td>
+                            <td>
+                                @item.satnica.DatumSatnice.ToShortDateString()
+                            </td>
+                            <td>
+                                @item.satnica.DatumSlanja.ToShortDateString()
+                            </td>
+                            <td>
+                                @item.satnica.DatumSlanja.ToString("H:mm")
+                            </td>
+                            <td>
+                                @Html.ActionLink(@PotvrdaSatnica.Detalji, "DetaljiSatnice", new { SatnicaID = item.satnica.IDSatnica }, new { @class = "btn btn-primary btn-sm" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

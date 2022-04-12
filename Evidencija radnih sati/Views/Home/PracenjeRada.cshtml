@@ -1,0 +1,278 @@
+﻿@model Evidencija_radnih_sati.Models.ViewModel.PracenjeRadaVM
+@using Evidencija_radnih_sati.Resources
+
+@{
+    Layout = null;
+    ViewBag.Title = "PracenjeRada";
+
+}
+
+<html>
+<head>
+    <title>Praćenje rada</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/PracenjeRada.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/Error.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+</head>
+<body>
+    @{Html.RenderAction("Navigacija", "Home");}
+    <div id="pracenje-rada-container" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4 text-center">@PracenjeRada.PracenjeRadaNaslov</h1>
+        </div>
+        @using (Html.BeginForm("PracenjeRada", "Home", FormMethod.Post, new { id = "frm" }))
+        {
+            @Html.Hidden("IDDjelatnik", Model.IDDjelatnik)
+            @Html.Hidden("PromjenaDatuma", new { id = "DateChange" });
+                <div class="row mt-4">
+                    <div class="col-sm-2 div-date">
+                        <h4>@PracenjeRada.Datum: </h4>
+                        <input id="datepicker" class="form-control" type="text" name="Datum" value="@Model.Datum.ToShortDateString()" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>@PracenjeRada.Projekt</th>
+                                <th>@PracenjeRada.Zabiljezeno</th>
+                                <th>@PracenjeRada.RadniSati</th>
+                                <th>@PracenjeRada.PrekovremeniSati</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Ako nema satnice na poslani datum napravi novu-->
+                            @if (Model.Satnica == null)
+                            {
+                                foreach (var projekt in Model.Projekti)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(model => projekt.Naziv)</td>
+                                        <td>
+                                            @Html.TextBox(
+                                         name: "Zabiljezeno",
+                                         value: "",
+                                         htmlAttributes: new { @class = "zabiljezeno readonly" })
+                                        </td>
+                                        <td class="radniSati-td">
+                                            @Html.TextBox(
+                                         name: "radniSati",
+                                         value: "",
+                                         htmlAttributes: new { @type = "number", @class = "radniSati form-control" })
+
+                                        </td>
+                                        <td>
+                                            @Html.TextBox(
+                                         name: "prekovremeniSati",
+                                         value: "",
+                                         htmlAttributes: new { @type = "number", @class = "prekovremeniSati form-control" })
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn-start btn btn-primary btn-sm">Start</button>
+                                            <button type="button" class="btn-stop btn btn-danger btn-sm" disabled>Stop</button>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>@PracenjeRada.Ukupno</td>
+                                    <td>
+                                        @Html.TextBox(
+                                       name: "zabiljezenoUkupno",
+                                       value: "",
+                                       htmlAttributes: new { @class = "readonly" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox(
+                                       name: "radniSatiUkupno",
+                                       value: "",
+                                       htmlAttributes: new { @class = "readonly" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox(
+                                       name: "prekovremeniSatiUkupno",
+                                       value: "",
+                                       htmlAttributes: new { @class = "readonly" })
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            }
+
+                            // U suprotnom ucitaj satnicu i limitiraj unos ovisno o tome je li poslana ili je na doradi
+                            else
+                            {
+                                @Html.Hidden("Satnica", Model.Satnica)
+                                for (int i = 0; i < Model.Projekti.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(model => Model.Projekti[i].Naziv)</td>
+                                        <td>
+                                            @Html.TextBox(
+                                         name: "Zabiljezeno",
+                                         value: Model.Zabiljezeno[i] == "" ? "" : Model.Zabiljezeno[i].ToString(),
+                                         htmlAttributes: new { @class = "zabiljezeno readonly" })
+                                        </td>
+
+                                        @if (Model.Satnica.JePoslano == true)
+                                        {
+                                            <td>
+                                                @Html.TextBox(
+                                                name: "radniSati",
+                                                value: Model.radniSati[i] == 0 ? "" : Model.radniSati[i].ToString(),
+                                                htmlAttributes: new { @type = "number", @class = "readonly radniSati form-control" })
+                                            </td>
+                                            <td>
+                                                @Html.TextBox(
+                                                name: "prekovremeniSati",
+                                                value: Model.prekovremeniSati[i] == 0 ? "" : Model.prekovremeniSati[i].ToString(),
+                                                htmlAttributes: new { @type = "number", @class = "readonly prekovremeniSati form-control" })
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            @Html.Hidden("IDSatnica", Model.Satnica.IDSatnica);
+                                            <td>
+                                                @Html.TextBox(
+                                                name: "radniSati",
+                                                value: Model.radniSati[i] == 0 ? "" : Model.radniSati[i].ToString(),
+                                                htmlAttributes: new { @type = "number", @class = "radniSati form-control" })
+
+                                            </td>
+
+                                            <td>
+                                                @Html.TextBox(
+                                                name: "prekovremeniSati",
+                                                value: Model.prekovremeniSati[i] == 0 ? "" : Model.prekovremeniSati[i].ToString(),
+                                                htmlAttributes: new { @type = "number", @class = "prekovremeniSati form-control" })
+                                            </td>
+                                        }
+                                        <td>
+                                            <button type="button" class="btn-start btn btn-primary btn-sm" disabled>Start</button>
+                                            <button type="button" class="btn-stop btn btn-danger btn-sm" disabled>Stop</button>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>@PracenjeRada.Ukupno</td>
+                                    <td>
+                                        @Html.TextBox(
+                                        name: "zabiljezenoUkupno",
+                                        value: Model.zabiljezenoUkupno == "" ? "" : Model.zabiljezenoUkupno.ToString(),
+                                        htmlAttributes: new { @class = "readonly" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox(
+                                        name: "radniSatiUkupno",
+                                        value: Model.radniSatiUkupno == 0 ? "0" : Model.radniSatiUkupno.ToString(),
+                                        htmlAttributes: new { @class = "readonly" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox(
+                                        name: "prekovremeniSatiUkupno",
+                                        value: Model.prekovremeniSatiUkupno == 0 ? "" : Model.prekovremeniSatiUkupno.ToString(),
+                                        htmlAttributes: new { @class = "readonly" })
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!--Error fieldovi-->
+                <div>
+                    <div class="field-validation-valid" data-valmsg-for="radniSati" data-valmsg-replace="true"></div>
+                    <div class="field-validation-valid" data-valmsg-for="prekovremeniSati" data-valmsg-replace="true"></div>
+                    <div class="field-validation-valid" data-valmsg-for="radniSatiUkupno" data-valmsg-replace="true"></div>
+                    <div class="field-validation-valid" data-valmsg-for="prekovremeniSatiUkupno" data-valmsg-replace="true"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2>@PracenjeRada.Komentar</h2>
+                        @if (Model.Satnica != null)
+                        {
+                            if (Model.Satnica.JePoslano == true)
+                            {
+                                @Html.TextArea(
+                                name: "komentar",
+                                value: Model.Komentar == "" ? "" : Model.Komentar.ToString(),
+                                htmlAttributes: new { @cols = 40, @rows = 5, @class = "readonly form-control ", @maxlength = "700" })
+                            }
+                            else
+                            {
+                                @Html.TextArea(
+                                name: "komentar",
+                                value: Model.Komentar == "" ? "" : Model.Komentar.ToString(),
+                                htmlAttributes: new { @cols = 40, @rows = 5, @class = "form-control ", @maxlength = "700" })
+                            }
+                        }
+
+                        else
+                        {
+                            @Html.TextArea(
+                            name: "komentar",
+                            htmlAttributes: new { @cols = 40, @rows = 5, @class = "form-control", @maxlength = "700" })
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 mb-4">
+                        <div class="float-right">
+                            @if (Model.Satnica != null)
+                            {
+                                if (Model.Satnica.JePoslano == true)
+                                {
+                                    <input type="button" id="btnOdustani" name="Odustani" value="@PracenjeRada.Odustani" class="btn btn-outline-primary btn-action" disabled />
+                                    <input type="button" id="btnSpremi" name="Spremi" value="@PracenjeRada.Spremi" class="btn btn-success btn-action" disabled />
+                                    <input type="submit" id="btnPredaj" name="Predaj" value="@PracenjeRada.Predaj" class="btn btn-primary btn-action" disabled />
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(PracenjeRada.Odustani, "PracenjeRada", "Home", new { datum = DateTime.Now }, new { @class = "btn btn-outline-primary btn-action" })
+                                    <input type="button" id="btnSpremi" name="Spremi" value="@PracenjeRada.Spremi" class="btn btn-success btn-action" />
+                                    <input type="submit" id="btnPredaj" name="Predaj" value="@PracenjeRada.Predaj" class="btn btn-primary btn-action" />
+                                }
+                            }
+                            else
+                            {
+                                @Html.ActionLink(PracenjeRada.Odustani, "PracenjeRada", "Home", new { datum = DateTime.Now }, new { @class = "btn btn-outline-primary btn-action" })
+                                <input type="button" id="btnSpremi" name="Spremi" value="@PracenjeRada.Spremi" class="btn btn-success btn-action" />
+                                <input type="submit" id="btnPredaj" name="Predaj" value="@PracenjeRada.Predaj" class="btn btn-primary btn-action" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            
+        }
+    </div>
+    <script>
+        // Odredi format datuma ovisno o izabranom culture-u
+        $(function () {
+            var cultureInfo = '@System.Globalization.CultureInfo.CurrentCulture.Name';
+            if (cultureInfo == 'en') {
+                $('#datepicker').datepicker({
+                    dateFormat: 'mm/dd/yy'
+                });
+            }
+            else {
+                $('#datepicker').datepicker({
+                    dateFormat: 'dd.mm.yy'
+                });
+            }
+        });
+    </script>
+    <script src="~/Scripts/PracenjeRada.js"></script>
+    <script src="~/Scripts/Stopwatch.js"></script>
+</body>
+</html>
+
+
+
+
+

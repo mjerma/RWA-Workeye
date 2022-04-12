@@ -1,0 +1,55 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="FormeEntitetaSite.master.cs" Inherits="Administracija_i_izvjestavanje.FormeEntitetaSite" %>
+
+<%@ Register Src="~/Navigacija.ascx" TagPrefix="uc1" TagName="Navigacija" %>
+
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link href="Content/Forms.css" rel="stylesheet" />
+    <link href="Content/Site.css" rel="stylesheet" />
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+    <script src="Scripts/bootstrap.bundle.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="Scripts/FormeJS.js"></script>
+    <script>
+        $(function () {
+            var cultureInfo = '<%= System.Globalization.CultureInfo.CurrentCulture.Name %>';
+            if (cultureInfo == 'en') {
+                $('#ContentPlaceHolder1_txtPocetniDatum').datepicker({
+                    dateFormat: 'mm/dd/yy'
+                });
+
+                $('#ContentPlaceHolder1_txtZavrsniDatum').datepicker({
+                    dateFormat: 'mm/dd/yy'
+                });
+            }
+            else {
+                $('#ContentPlaceHolder1_txtPocetniDatum').datepicker({
+                    dateFormat: 'dd.mm.yy'
+                });
+
+                $('#ContentPlaceHolder1_txtZavrsniDatum').datepicker({
+                    dateFormat: 'dd.mm.yy'
+                });
+            }
+        });
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <uc1:Navigacija runat="server" ID="Navigacija" />
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,43 @@
+﻿@model Evidencija_radnih_sati.Models.ViewModel.PrijavaVM
+
+@{
+    Layout = null;
+}
+
+
+<html>
+<head>
+    <title>Prijava</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/Prijava.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="global-container">
+        <div class="card login-form">
+            <div class="card-body">
+                <h3 class="card-title text-center">Prijava korisnika</h3>
+                <div class="card-text">
+                    @using (Html.BeginForm(actionName: "Prijava", controllerName: "Home", method: FormMethod.Post))
+                    {
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Email)
+                            @Html.TextBoxFor(model => model.Email, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Zaporka)
+                            @Html.PasswordFor(model => model.Zaporka, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Zaporka)
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block prijava">Prijava</button>
+                        <span class="error-msg">@Html.DisplayFor(model => model.PrijavaError)</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
